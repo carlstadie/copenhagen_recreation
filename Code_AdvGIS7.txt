@@ -4,6 +4,8 @@
   <head>
     <title>Recreational Sites in Copenhagen</title>
 
+<!--IMPORT LIBRARIES -->
+
     	<script src="jquery/jquery-1.11.3.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<script src="bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
@@ -13,6 +15,9 @@
     	<script src="ol3-layerswitcher-master/src/ol3-layerswitcher.js"></script>
 
 	<style>
+	
+		<!-- DEFINE ZOOMSLIDER POSITION AND VISUALISATION PARAMETERS IN CSS-->
+	
 		#map2 .ol-zoom .ol-zoom-out {
 		  margin-top: 204px;
 		}
@@ -38,10 +43,14 @@
 		  top: 232px;
 		}
 
+		<!--DEFINE POSITION FOR MOUSE POSITION FIELD (BOTTOM-RIGHT)-->
+
 		.ol-mouse-position{
 			top:41em;
 			left:36.5em;
 			}
+
+		<!--DEFINE POSITION FOR LAYER SWITCHER (TOP-RIGHT)-->
 
     	 	.ol-layer-switcher {
 			position: absolute;
@@ -54,34 +63,35 @@
 
   <body>
 
+<!--ADD MAP AND CONTAINER FOR LAYER SWITCHER + DIMENSIONS-->
+
    	<div id="map" class="map" style="height:600px; width:800px"></div>
    	<div class="container-fluid">
 	<div class="row-fluid">
-	<div id="map" class="map" style="height: 600px; width: 800px">
-	</div>
 	</div>
     	</div>
 
     <script>
 
-// add mouse position panel
-    var mousePositionControl = new ol.control.MousePosition({
-	        coordinateFormat: ol.coordinate.createStringXY(1)
+// ADD MAP ELEMENTS IN JAVA SCRIPT
+
+      var mousePositionControl = new ol.control.MousePosition({
+	        coordinateFormat: ol.coordinate.createStringXY(1) 	// DEFINE COORDINATE SYSTEM AND DECIMAL PLACES FOR MOUSE POSITION
 		});
 
-    var scaleLineControl = new ol.control.ScaleLine({
-			  units: 'meter',
-			        minWidth: 100
+      var scaleLineControl = new ol.control.ScaleLine({
+			  units: 'meter', 				// DEFINE UNIT AND DIMENSION OF SCALE BAR
+			  minWidth: 100
       });
 
-      var map = new ol.Map({
+      var map = new ol.Map({						// ADD OPEN LAYERS MAP
       controls: ol.control.defaults({
 	            attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
 	              collapsible: false
 	            })
 	          }).extend([scaleLineControl, mousePositionControl]),
         layers: [
-	   		new ol.layer.Group({
+	   	  new ol.layer.Group({					// ADD OSM AS BASEMAP
 	   	    title: 'Base maps',
 	   	    layers: [
 	             new ol.layer.Tile({
@@ -93,11 +103,11 @@
 	   	      })
 	   		]
 	           }),
-	           new ol.layer.Group({
+	           new ol.layer.Group({					// ADD LOCAL GEOSERVER LAYERS AS WMS
 	   		title: 'WMS',
 	   		layers: [
 	   		  new ol.layer.Tile({
-	   			title: 'Parks',
+	   			title: 'Parks',				//PARKS 
 	   			source: new ol.source.TileWMS({
 	   			url: 'http://localhost:8080/geoserver/wms',
 	   			params: {'LAYERS': 'advanGIS:parks'},
@@ -105,7 +115,7 @@
 	   			})
 	   		  }),
 	   		new ol.layer.Tile({
-	   			title: 'Cultural Centres',
+	   			title: 'Cultural Centres',		// CULTURAL CENTRES
 	   			source: new ol.source.TileWMS({
 	   			url: 'http://localhost:8080/geoserver/wms',
 	   			params: {'LAYERS': 'advanGIS:culturalcentres'},
@@ -113,7 +123,7 @@
 	   			})
 	             }),
 	          	new ol.layer.Tile({
-	   			title: 'Playgrounds',
+	   			title: 'Playgrounds',			// PLAYGROUNDS
  	   			source: new ol.source.TileWMS({
  	   			url: 'http://localhost:8080/geoserver/wms',
  	   			params: {'LAYERS': 'advanGIS:playground'},
@@ -121,7 +131,7 @@
  	   			})
 	             }),
 			new ol.layer.Tile({
-	   			title: 'Swimming Hall',
+	   			title: 'Swimming Hall',			// SWIMMING HALLS
 	   			source: new ol.source.TileWMS({
 	   			url: 'http://localhost:8080/geoserver/wms',
 	   			params: {'LAYERS': 'advanGIS:swimminghall'},
@@ -134,17 +144,17 @@
 
        	target: 'map',
         view: new ol.View({
-        center: [1400051, 7494880],
-        zoom: 12
+        center: [1400051, 7494880],					// SET MAP CENTRE TO CENTRAL COPENHAGEN
+        zoom: 12							// SET ZOOM LEVEL
         })
       });
 
-      var zoomslider = new ol.control.ZoomSlider();
+      var zoomslider = new ol.control.ZoomSlider();			// DEFINE AND ADD ZOOMSLIDER
       map.addControl(zoomslider);
 
-      map.addControl(scaleLineControl);
+      map.addControl(scaleLineControl);					// ADD SCALEBAR
 
-      var layerSwitcher = new ol.control.LayerSwitcher({
+      var layerSwitcher = new ol.control.LayerSwitcher({		// DEFINE AND ADD ALYER SWITCHER
 	          tipLabel: 'Signatur' // Optional label for button
 	        });
       map.addControl(layerSwitcher);
