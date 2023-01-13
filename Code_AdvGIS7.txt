@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Recreational Sites in Copenhagen</title>
+
+    	<script src="jquery/jquery-1.11.3.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<script src="bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="ol_v3.5.0-dist/ol.css" type="text/css">
+	<script src="ol_v3.5.0-dist/ol.js"></script>
+	<link rel="stylesheet" href="ol3-layerswitcher-master/src/ol3-layerswitcher.css">
+    	<script src="ol3-layerswitcher-master/src/ol3-layerswitcher.js"></script>
+
+	<style>
+		#map2 .ol-zoom .ol-zoom-out {
+		  margin-top: 204px;
+		}
+		#map2 .ol-zoomslider {
+		  background-color: transparent;
+		  top: 2.3em;
+		}
+
+		#map2 .ol-touch .ol-zoom .ol-zoom-out {
+		  margin-top: 212px;
+		}
+		#map2 .ol-touch .ol-zoomslider {
+		  top: 2.75em;
+		}
+
+		#map2 .ol-zoom-in.ol-has-tooltip:hover [role&#x3D;tooltip],
+		#map2 .ol-zoom-in.ol-has-tooltip:focus [role&#x3D;tooltip] {
+		  top: 3px;
+		}
+
+		#map2 .ol-zoom-out.ol-has-tooltip:hover [role&#x3D;tooltip],
+		#map2 .ol-zoom-out.ol-has-tooltip:focus [role&#x3D;tooltip] {
+		  top: 232px;
+		}
+
+		.ol-mouse-position{
+			top:41em;
+			left:36.5em;
+			}
+
+    	 	.ol-layer-switcher {
+			position: absolute;
+			top: 0.5em;
+			right: 0.5em;
+			text-align: left;
+	  	}
+    	</style>
+  </head>
+
+  <body>
+
+   	<div id="map" class="map" style="height:600px; width:800px"></div>
+   	<div class="container-fluid">
+	<div class="row-fluid">
+	<div id="map" class="map" style="height: 600px; width: 800px">
+	</div>
+	</div>
+    	</div>
+
+    <script>
+
+// add mouse position panel
+    var mousePositionControl = new ol.control.MousePosition({
+	        coordinateFormat: ol.coordinate.createStringXY(1)
+		});
+
+    var scaleLineControl = new ol.control.ScaleLine({
+			  units: 'meter',
+			        minWidth: 100
+      });
+
+      var map = new ol.Map({
+      controls: ol.control.defaults({
+	            attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+	              collapsible: false
+	            })
+	          }).extend([scaleLineControl, mousePositionControl]),
+        layers: [
+	   		new ol.layer.Group({
+	   	    title: 'Base maps',
+	   	    layers: [
+	             new ol.layer.Tile({
+	   			title: 'OSM',
+	   			style: 'Road',
+	   	        	type: 'base',
+	   	       	 	visible: true,
+	               		source: new ol.source.OSM()
+	   	      })
+	   		]
+	           }),
+	           new ol.layer.Group({
+	   		title: 'WMS',
+	   		layers: [
+	   		  new ol.layer.Tile({
+	   			title: 'Parks',
+	   			source: new ol.source.TileWMS({
+	   			url: 'http://localhost:8080/geoserver/wms',
+	   			params: {'LAYERS': 'advanGIS:parks'},
+	   			serverType: 'geoserver'
+	   			})
+	   		  }),
+	   		new ol.layer.Tile({
+	   			title: 'Cultural Centres',
+	   			source: new ol.source.TileWMS({
+	   			url: 'http://localhost:8080/geoserver/wms',
+	   			params: {'LAYERS': 'advanGIS:culturalcentres'},
+	   			serverType: 'geoserver'
+	   			})
+	             }),
+	          	new ol.layer.Tile({
+	   			title: 'Playgrounds',
+ 	   			source: new ol.source.TileWMS({
+ 	   			url: 'http://localhost:8080/geoserver/wms',
+ 	   			params: {'LAYERS': 'advanGIS:playground'},
+ 	   			serverType: 'geoserver'
+ 	   			})
+	             }),
+			new ol.layer.Tile({
+	   			title: 'Swimming Hall',
+	   			source: new ol.source.TileWMS({
+	   			url: 'http://localhost:8080/geoserver/wms',
+	   			params: {'LAYERS': 'advanGIS:swimminghall'},
+	   			serverType: 'geoserver'
+	   			})
+	             })
+	            ]
+	    })
+	    ],
+
+       	target: 'map',
+        view: new ol.View({
+        center: [1400051, 7494880],
+        zoom: 12
+        })
+      });
+
+      var zoomslider = new ol.control.ZoomSlider();
+      map.addControl(zoomslider);
+
+      map.addControl(scaleLineControl);
+
+      var layerSwitcher = new ol.control.LayerSwitcher({
+	          tipLabel: 'Signatur' // Optional label for button
+	        });
+      map.addControl(layerSwitcher);
+
+    </script>
+  </body>
+</html>
